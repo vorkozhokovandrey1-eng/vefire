@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111996071', 'ym');
+
+    ym(111996071, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/111996071" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
@@ -353,13 +366,13 @@
     <div>
       <span class="eyebrow"><span class="dot" style="width:6px;height:6px;"></span>Скоро запуск в Томске</span>
       <h1>Показывайте товар <em>в эфире</em>,<br>а не в карточке</h1>
-      <p class="lead">Маркетплейс, где продавцы показывают товар живым видео вместо статичных фото — и платят 5% комиссии вместо 15–25% на Ozon и Wildberries.</p>
+      <p class="lead">Маркетплейс, где продавцы показывают товар живым видео вместо статичных фото — и платят 14% вместо 25% на Ozon и Wildberries.</p>
       <div class="hero-actions">
         <button class="btn-primary" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Оставить заявку</button>
         <button class="btn-ghost" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">Почему не Ozon</button>
       </div>
       <div class="stat-row">
-        <div class="stat"><b>5%</b><span>комиссия с продажи</span></div>
+        <div class="stat"><b>До 14%</b><span>комиссия с продажи</span></div>
         <div class="stat"><b>1 регион</b><span>без конкуренции с гигантами</span></div>
         <div class="stat"><b>1 день</b><span>доставка на следующий день</span></div>
       </div>
@@ -406,7 +419,7 @@
       <div class="compare-col good">
         <h3>Наша платформа</h3>
         <ul>
-          <li><span class="mark">+</span>Комиссия 5% — фиксировано и прозрачно</li>
+          <li><span class="mark">+</span>Комиссия до 14% — прозрачно</li>
           <li><span class="mark">+</span>Один регион — вы заметны с первого дня</li>
           <li><span class="mark">+</span>Живое видео показывает товар так, как он есть</li>
           <li><span class="mark">+</span>Покупатель пишет вопросы прямо во время показа</li>
@@ -437,7 +450,7 @@
       </div>
       <div class="feat">
         <div class="ic">💳</div>
-        <h3>5% комиссии, без сюрпризов</h3>
+        <h3>Не более 14% комиссии, без сюрпризов</h3>
         <p>Оплата удерживается автоматически при продаже: с товара за 1000 ₽ вы получаете 950 ₽ на баланс.</p>
       </div>
       <div class="feat">
@@ -468,7 +481,7 @@
     <div class="flow">
       <div class="flow-step"><div class="num">1</div><h3>Показываете товар в эфире</h3><p>Покупатель видит вещь живьём — фактуру, размер, работу — в вертикальной ленте вашего региона.</p></div>
       <div class="flow-step"><div class="num">2</div><h3>Покупатель добавляет в корзину</h3><p>Товар переходит в корзину продавца и покупателя одним нажатием — без перехода на сторонний сайт.</p></div>
-      <div class="flow-step"><div class="num">3</div><h3>Оплата и авторасчёт комиссии</h3><p>Система считает итоговую сумму и удерживает 5% — остальное сразу закрепляется за вами.</p></div>
+      <div class="flow-step"><div class="num">3</div><h3>Оплата и авторасчёт комиссии</h3><p>Система считает итоговую сумму и удерживает до 14%% — остальное сразу закрепляется за вами.</p></div>
       <div class="flow-step"><div class="num">4</div><h3>Вы закрываете приём заказов и формируете доставку</h3><p>По правилам — на следующий день, через СДЭК, Boxberry или Почту России.</p></div>
       <div class="flow-step"><div class="num">5</div><h3>Покупатель получает и ставит оценку</h3><p>Отзыв с фото и рейтингом поднимает вас в ленте для следующих покупателей.</p></div>
     </div>
@@ -502,9 +515,33 @@ function handleSignup(e){
   e.preventDefault();
   const email = document.getElementById('email').value;
   const msg = document.getElementById('formMsg');
-  msg.textContent = 'Готово — заявка принята. Напишем на ' + email + ' перед запуском.';
-  msg.classList.add('ok');
-  e.target.reset();
+  const btn = e.target.querySelector('button');
+  const scriptUrl = 'https://script.google.com/macros/s/AKfycbxEJnsajsn1yAkE5VJ8W1xqz0DMfCg7a8jnVmyvyf4zNZ1VKjMisktddFi0D3EK3MdYFA/exec';
+
+  btn.disabled = true;
+  btn.textContent = 'Отправляем…';
+
+  const formData = new FormData();
+  formData.append('email', email);
+
+  fetch(scriptUrl, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: formData
+  })
+  .then(() => {
+    msg.textContent = 'Готово — заявка принята. Напишем на ' + email + ' перед запуском.';
+    msg.classList.add('ok');
+    e.target.reset();
+  })
+  .catch(() => {
+    msg.textContent = 'Не получилось отправить — попробуйте ещё раз.';
+    msg.style.color = '#ff8b71';
+  })
+  .finally(() => {
+    btn.disabled = false;
+    btn.textContent = 'Оставить заявку';
+  });
 }
 </script>
 
