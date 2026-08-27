@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Витрина в эфире — маркетплейс для продавцов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: dark;
+    --bg:#12151b;
+    --bg-soft:#181c24;
+    --panel:#1e232d;
+    --panel-line:#2b3140;
+    --text:#f4f2ec;
+    --text-dim:#b7bdca;
+    --text-mute:#868da0;
+    --live:#ff5a36;
+    --live-dim:#ff5a3622;
+    --mint:#3fd6a3;
+    --mint-dim:#3fd6a31c;
+    --gold:#ffb44f;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Manrope', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{
+    font-family:'Unbounded', sans-serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    color:var(--text);
+  }
+  .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit;}
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+  @media(max-width:640px){ .wrap{padding:0 20px;} }
+
+  /* ---------- background texture ---------- */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.035;
+    background-image:radial-gradient(circle at 1px 1px, #fff 1px, transparent 0);
+    background-size:22px 22px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(18,21,27,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--panel-line);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:72px;
+  }
+  .logo{
+    font-family:'Unbounded', sans-serif; font-weight:700; font-size:18px;
+    display:flex; align-items:center; gap:9px;
+  }
+  .logo .dot{
+    width:9px; height:9px; border-radius:50%; background:var(--live);
+    box-shadow:0 0 0 4px var(--live-dim);
+    animation:pulse 2s infinite;
+  }
+  .nav-cta{
+    font-family:'Manrope'; font-weight:700; font-size:14px;
+    background:var(--live); color:#12151b; border:none;
+    padding:11px 22px; border-radius:100px; cursor:pointer;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .nav-cta:hover{ background:#ff6f4e; transform:translateY(-1px); }
+
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 var(--live-dim); }
+    70%{ box-shadow:0 0 0 8px transparent; }
+    100%{ box-shadow:0 0 0 0 transparent; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative; z-index:1;
+    padding:88px 0 60px;
+    background:var(--bg);
+  }
+  .hero .wrap{
+    display:grid;
+    grid-template-columns:1.05fr 0.75fr;
+    gap:56px;
+    align-items:center;
+  }
+  @media(max-width:900px){
+    .hero .wrap{ grid-template-columns:1fr; }
+    .hero{ padding:52px 0 40px; }
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono'; font-size:12.5px; letter-spacing:0.06em;
+    color:var(--live); text-transform:uppercase;
+    background:var(--live-dim); border:1px solid #ff5a3644;
+    padding:7px 14px; border-radius:100px; margin-bottom:22px;
+  }
+  .hero h1{
+    font-size:clamp(34px, 5vw, 58px);
+    line-height:1.04;
+    margin-bottom:22px;
+  }
+  .hero h1 em{
+    font-style:normal; color:var(--live);
+  }
+  .hero p.lead{
+    font-size:18px; color:var(--text-dim); max-width:520px; margin-bottom:32px;
+  }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+  .btn-primary{
+    font-family:'Manrope'; font-weight:800; font-size:15.5px;
+    background:var(--text); color:var(--bg); border:none;
+    padding:16px 28px; border-radius:100px; cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 10px 24px -8px #ffffff33; }
+  .btn-ghost{
+    font-family:'Manrope'; font-weight:700; font-size:15px;
+    background:transparent; color:var(--text-dim); border:1px solid var(--panel-line);
+    padding:15px 24px; border-radius:100px; cursor:pointer;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .btn-ghost:hover{ border-color:var(--text-dim); color:var(--text); }
+
+  .stat-row{ display:flex; gap:36px; margin-top:44px; flex-wrap:wrap; }
+  .stat-row .stat b{
+    font-family:'Unbounded'; font-size:26px; display:block; color:var(--mint);
+  }
+  .stat-row .stat span{ font-size:13px; color:var(--text-mute); }
+
+  /* ---------- PHONE MOCK (signature element) ---------- */
+  .phone-stage{ display:flex; justify-content:center; }
+  .phone{
+    width:280px; height:566px;
+    background:linear-gradient(165deg,#20242e,#14171e);
+    border-radius:38px;
+    border:1px solid #333a49;
+    padding:12px;
+    box-shadow:0 40px 80px -30px #000000cc, 0 0 0 1px #00000055;
+    position:relative;
+  }
+  .phone-screen{
+    position:relative; width:100%; height:100%; border-radius:28px; overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 30% 15%, #3a2e46 0%, transparent 55%),
+      radial-gradient(100% 80% at 80% 90%, #1f3a34 0%, transparent 60%),
+      linear-gradient(180deg,#232636,#141620);
+  }
+  .notch{
+    position:absolute; top:8px; left:50%; transform:translateX(-50%);
+    width:84px; height:20px; background:#0d0f14; border-radius:12px; z-index:5;
+  }
+  .live-badge{
+    position:absolute; top:26px; left:16px; z-index:4;
+    display:flex; align-items:center; gap:6px;
+    background:#00000066; backdrop-filter:blur(4px);
+    padding:6px 10px 6px 8px; border-radius:100px;
+    font-family:'JetBrains Mono'; font-size:10.5px; font-weight:600; letter-spacing:.04em;
+    color:#fff;
+  }
+  .live-badge .r{
+    width:6px; height:6px; border-radius:50%; background:var(--live);
+    animation:pulse 1.6s infinite;
+  }
+  .seller-tag{
+    position:absolute; top:60px; left:16px; z-index:4;
+    font-size:11px; color:#d8d5cc; opacity:.85;
+  }
+  .seller-tag b{ display:block; font-size:12.5px; color:#fff; }
+
+  .product-card{
+    position:absolute; left:10px; right:10px; bottom:10px; z-index:5;
+    background:#181b22ee;
+    border:1px solid #333a49;
+    border-radius:18px;
+    padding:14px 14px 16px;
+    backdrop-filter:blur(6px);
+  }
+  .showing-now{
+    display:flex; align-items:center; gap:6px;
+    font-family:'JetBrains Mono'; font-size:9.5px; letter-spacing:.05em;
+    color:var(--mint); text-transform:uppercase; margin-bottom:8px;
+  }
+  .showing-now .bars{ display:flex; gap:2px; align-items:flex-end; height:9px; }
+  .showing-now .bars i{
+    width:2px; background:var(--mint); display:block; border-radius:1px;
+    animation:eq 0.9s ease-in-out infinite;
+  }
+  .showing-now .bars i:nth-child(1){height:40%; animation-delay:0s;}
+  .showing-now .bars i:nth-child(2){height:100%; animation-delay:.15s;}
+  .showing-now .bars i:nth-child(3){height:65%; animation-delay:.3s;}
+  @keyframes eq{ 0%,100%{ transform:scaleY(0.4);} 50%{ transform:scaleY(1);} }
+
+  .pc-title{ font-weight:700; font-size:14.5px; margin-bottom:6px; }
+  .pc-row{ display:flex; align-items:center; justify-content:space-between; }
+  .pc-rating{ font-size:12px; color:var(--text-dim); display:flex; align-items:center; gap:4px; }
+  .pc-rating b{ color:var(--gold); }
+  .pc-price{ font-family:'Unbounded'; font-size:16px; }
+  .pc-add{
+    background:var(--live); color:#12151b; border:none; border-radius:10px;
+    padding:9px 14px; font-weight:800; font-size:13px; margin-top:12px; width:100%; cursor:pointer;
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  html, body{ background:var(--bg); }
+  section{ position:relative; z-index:1; padding:88px 0; background:var(--bg); }
+  @media(max-width:640px){ section{ padding:56px 0; } }
+  .sec-head{ max-width:640px; margin-bottom:52px; }
+  .sec-eyebrow{
+    font-family:'JetBrains Mono'; font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--text-mute); margin-bottom:12px; display:block;
+  }
+  .sec-head h2{ font-size:clamp(26px,3.4vw,38px); line-height:1.12; margin-bottom:14px; }
+  .sec-head p{ color:var(--text-dim); font-size:16.5px; max-width:560px; }
+
+  /* ---------- PROBLEM (comparison) ---------- */
+  .compare{
+    display:grid; grid-template-columns:1fr 1fr; gap:1px;
+    background:var(--panel-line); border-radius:20px; overflow:hidden;
+    border:1px solid var(--panel-line);
+  }
+  @media(max-width:760px){ .compare{ grid-template-columns:1fr; } }
+  .compare-col{ background:var(--bg-soft); padding:32px 28px; }
+  .compare-col.bad h3{ color:#ff8b71; }
+  .compare-col.good{ background:#152420; }
+  .compare-col.good h3{ color:var(--mint); }
+  .compare-col h3{
+    font-family:'Unbounded'; font-size:16px; margin-bottom:20px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .compare-col ul{ list-style:none; display:flex; flex-direction:column; gap:16px; }
+  .compare-col li{
+    font-size:14.5px; color:var(--text-dim); display:flex; gap:10px; align-items:flex-start;
+  }
+  .compare-col.good li{ color:#dbf5ea; }
+  .compare-col li .mark{ flex:none; font-family:'JetBrains Mono'; font-weight:700; margin-top:1px; }
+  .compare-col.bad li .mark{ color:#ff5a36; }
+  .compare-col.good li .mark{ color:var(--mint); }
+
+  /* ---------- FEATURES ---------- */
+  .feat-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--panel-line); border:1px solid var(--panel-line); border-radius:20px; overflow:hidden;
+  }
+  @media(max-width:900px){ .feat-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:600px){ .feat-grid{ grid-template-columns:1fr; } }
+  .feat{
+    background:var(--panel); padding:30px 26px; min-height:190px;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .feat .ic{
+    width:38px; height:38px; border-radius:10px; background:var(--live-dim);
+    display:flex; align-items:center; justify-content:center; font-size:17px;
+  }
+  .feat h3{ font-family:'Unbounded'; font-size:15.5px; font-weight:600; }
+  .feat p{ font-size:14px; color:var(--text-dim); }
+
+  /* ---------- HOW IT WORKS ---------- */
+  .flow{ display:flex; flex-direction:column; border-left:1px solid var(--panel-line); margin-left:14px; }
+  .flow-step{ position:relative; padding:0 0 40px 40px; }
+  .flow-step:last-child{ padding-bottom:0; }
+  .flow-step .num{
+    position:absolute; left:-15px; top:0;
+    width:29px; height:29px; border-radius:50%;
+    background:var(--bg); border:1px solid var(--live);
+    color:var(--live); font-family:'JetBrains Mono'; font-size:12px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .flow-step h3{ font-family:'Unbounded'; font-size:16px; font-weight:600; margin-bottom:6px; }
+  .flow-step p{ color:var(--text-dim); font-size:14.5px; max-width:480px; }
+
+  /* ---------- EMAIL CAPTURE ---------- */
+  .capture{
+    background:linear-gradient(150deg,#1c1420,#141b19 70%);
+    border:1px solid var(--panel-line);
+    border-radius:28px;
+    padding:60px 48px;
+    text-align:center;
+    position:relative; overflow:hidden;
+  }
+  @media(max-width:640px){ .capture{ padding:44px 24px; } }
+  .capture::before{
+    content:''; position:absolute; width:420px; height:420px; border-radius:50%;
+    background:radial-gradient(circle, #ff5a3622, transparent 70%);
+    top:-160px; right:-120px;
+  }
+  .capture h2{ font-size:clamp(24px,3.2vw,34px); margin-bottom:12px; position:relative; }
+  .capture p{ color:var(--text-dim); max-width:480px; margin:0 auto 32px; position:relative; }
+  .capture-form{
+    display:flex; gap:10px; max-width:440px; margin:0 auto; position:relative;
+  }
+  @media(max-width:480px){ .capture-form{ flex-direction:column; } }
+  .capture-form input{
+    flex:1; font-family:'Manrope'; font-size:15px;
+    background:var(--bg-soft); border:1px solid var(--panel-line); color:var(--text);
+    padding:15px 18px; border-radius:100px; outline:none;
+    transition:border-color .15s ease;
+  }
+  .capture-form input:focus{ border-color:var(--live); }
+  .capture-form input::placeholder{ color:var(--text-mute); }
+  .capture-form button{
+    font-family:'Manrope'; font-weight:800; font-size:15px;
+    background:var(--live); color:#12151b; border:none;
+    padding:15px 26px; border-radius:100px; cursor:pointer; white-space:nowrap;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .capture-form button:hover{ background:#ff6f4e; transform:translateY(-1px); }
+  .capture-note{ font-size:12.5px; color:var(--text-mute); margin-top:16px; position:relative; }
+  .form-msg{ font-size:14px; margin-top:14px; position:relative; min-height:20px; }
+  .form-msg.ok{ color:var(--mint); }
+
+  footer{
+    border-top:1px solid var(--panel-line);
+    padding:32px 0; position:relative; z-index:1;
+    background:var(--bg);
+  }
+  footer .wrap{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+  }
+  footer span{ font-size:13px; color:var(--text-mute); }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>ВЭФИРЕ</div>
+    <button class="nav-cta" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Стать продавцом</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow"><span class="dot" style="width:6px;height:6px;"></span>Скоро запуск в Томске</span>
+      <h1>Показывайте товар <em>в эфире</em>,<br>а не в карточке</h1>
+      <p class="lead">Маркетплейс, где продавцы показывают товар живым видео вместо статичных фото — и платят 5% комиссии вместо 15–25% на Ozon и Wildberries.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Оставить заявку</button>
+        <button class="btn-ghost" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">Почему не Ozon</button>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><b>5%</b><span>комиссия с продажи</span></div>
+        <div class="stat"><b>1 регион</b><span>без конкуренции с гигантами</span></div>
+        <div class="stat"><b>1 день</b><span>доставка на следующий день</span></div>
+      </div>
+    </div>
+    <div class="phone-stage">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="notch"></div>
+          <div class="live-badge"><span class="r"></span>В ЭФИРЕ</div>
+          <div class="seller-tag">Продавец<b>Мастерская «Кедр»</b></div>
+          <div class="product-card">
+            <div class="showing-now"><div class="bars"><i></i><i></i><i></i></div>Показывают сейчас</div>
+            <div class="pc-title">Разделочная доска, кедр</div>
+            <div class="pc-row">
+              <div class="pc-rating">★ <b>4.9</b> · 128 отзывов</div>
+              <div class="pc-price">1 450 ₽</div>
+            </div>
+            <button class="pc-add">Добавить в корзину</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="problem">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Проблема</span>
+      <h2>Большие маркетплейсы забирают маржу<br>и не дают показать товар</h2>
+      <p>Мелкому продавцу сложно конкурировать с тысячами карточек в одной категории — а комиссия съедает то немногое, что удаётся заработать.</p>
+    </div>
+    <div class="compare">
+      <div class="compare-col bad">
+        <h3>Ozon / Wildberries</h3>
+        <ul>
+          <li><span class="mark">−</span>Комиссия 15–25% и штрафы за «нарушения» правил</li>
+          <li><span class="mark">−</span>Товар — одна из тысяч одинаковых карточек</li>
+          <li><span class="mark">−</span>Фото не передаёт качество и детали вживую</li>
+          <li><span class="mark">−</span>Нет прямого диалога с покупателем до покупки</li>
+          <li><span class="mark">−</span>Продвижение требует платной рекламы внутри платформы</li>
+        </ul>
+      </div>
+      <div class="compare-col good">
+        <h3>Наша платформа</h3>
+        <ul>
+          <li><span class="mark">+</span>Комиссия 5% — фиксировано и прозрачно</li>
+          <li><span class="mark">+</span>Один регион — вы заметны с первого дня</li>
+          <li><span class="mark">+</span>Живое видео показывает товар так, как он есть</li>
+          <li><span class="mark">+</span>Покупатель пишет вопросы прямо во время показа</li>
+          <li><span class="mark">+</span>Рейтинг растёт от реальных продаж, а не от бюджета</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Решение</span>
+      <h2>Всё, что нужно, чтобы продавать без посредников</h2>
+      <p>Личный кабинет продавца устроен вокруг одного цикла: показали — положили в корзину — купили — доставили.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat">
+        <div class="ic">🎥</div>
+        <h3>Видео-витрина вместо фото</h3>
+        <p>Показывайте товар в вертикальной ленте в реальном времени — цвет, размер и цена переключаются рядом с видео.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">💬</div>
+        <h3>Вопросы прямо в эфире</h3>
+        <p>Покупатель пишет вопрос во время показа, вы отвечаете сразу — доверие растёт до оформления заказа.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">💳</div>
+        <h3>5% комиссии, без сюрпризов</h3>
+        <p>Оплата удерживается автоматически при продаже: с товара за 1000 ₽ вы получаете 950 ₽ на баланс.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">📦</div>
+        <h3>Доставка без своего склада</h3>
+        <p>СДЭК, Boxberry или Почта России — вы закрываете приём заказов и формируете отправку на следующий день.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">⭐</div>
+        <h3>Рейтинг за качество</h3>
+        <p>Оценки за товар, срок доставки и сервис поднимают вас выше в ленте — без платного продвижения.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">📊</div>
+        <h3>Отчётность в кабинете</h3>
+        <p>Продажи, комиссии и статус заказов — в одном месте, без отдельных таблиц и подсчётов вручную.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Как это устроено</span>
+      <h2>От показа до денег на балансе</h2>
+    </div>
+    <div class="flow">
+      <div class="flow-step"><div class="num">1</div><h3>Показываете товар в эфире</h3><p>Покупатель видит вещь живьём — фактуру, размер, работу — в вертикальной ленте вашего региона.</p></div>
+      <div class="flow-step"><div class="num">2</div><h3>Покупатель добавляет в корзину</h3><p>Товар переходит в корзину продавца и покупателя одним нажатием — без перехода на сторонний сайт.</p></div>
+      <div class="flow-step"><div class="num">3</div><h3>Оплата и авторасчёт комиссии</h3><p>Система считает итоговую сумму и удерживает 5% — остальное сразу закрепляется за вами.</p></div>
+      <div class="flow-step"><div class="num">4</div><h3>Вы закрываете приём заказов и формируете доставку</h3><p>По правилам — на следующий день, через СДЭК, Boxberry или Почту России.</p></div>
+      <div class="flow-step"><div class="num">5</div><h3>Покупатель получает и ставит оценку</h3><p>Отзыв с фото и рейтингом поднимает вас в ленте для следующих покупателей.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="signup">
+  <div class="wrap">
+    <div class="capture">
+      <h2>Попробуйте одними из первых продавцов</h2>
+      <p>Оставьте почту — пришлём приглашение на пилотный запуск в вашем регионе, до открытой продажи мест.</p>
+      <form class="capture-form" onsubmit="handleSignup(event)">
+        <input type="email" id="email" placeholder="you@example.com" required>
+        <button type="submit">Оставить заявку</button>
+      </form>
+      <div class="form-msg" id="formMsg"></div>
+      <p class="capture-note">Никакого спама — только приглашение на пилот и статус запуска.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo" style="font-size:14px;"><span class="dot" style="width:7px;height:7px;"></span>ВЭФИРЕ</div>
+    <span>© 2026 · маркетплейс для продавцов, которым тесно на больших площадках</span>
+  </div>
+</footer>
+
+<script>
+function handleSignup(e){
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const msg = document.getElementById('formMsg');
+  msg.textContent = 'Готово — заявка принята. Напишем на ' + email + ' перед запуском.';
+  msg.classList.add('ok');
+  e.target.reset();
+}
+</script>
+
+</body>
+</html>
